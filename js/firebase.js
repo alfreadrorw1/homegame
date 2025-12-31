@@ -1,8 +1,28 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { 
+    getAuth, 
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut 
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+import { 
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp,
+    collection,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    getDocs,
+    query,
+    orderBy,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// ⚠️ GANTI DENGAN CONFIG ANDA ⚠️
 const firebaseConfig = {
     apiKey: "AIzaSyBvr6owbrZS_9ltSIk_FJQ2XVva5fQjyr0",
     authDomain: "gabutan-alfread.firebaseapp.com",
@@ -19,21 +39,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export modules
-export { auth, db, onAuthStateChanged };
-
-// Check authentication state
-export function checkAuth() {
-    return new Promise((resolve, reject) => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                resolve(user);
-            } else {
-                reject(new Error('No user logged in'));
-            }
-        });
-    });
-}
+// Export semua fungsi yang dibutuhkan
+export { 
+    auth, 
+    db, 
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp,
+    collection,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    getDocs,
+    query,
+    orderBy,
+    onSnapshot
+};
 
 // Get user role
 export async function getUserRole(userId) {
