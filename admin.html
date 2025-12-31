@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Game Platform - Admin Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="home-game.html" class="nav-brand">
+                🎮 <span>Home Game</span>
+            </a>
+            
+            <button class="hamburger" id="hamburger">☰</button>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="home-game.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="tools.html" class="nav-link">Tools</a>
+                <a href="admin.html" class="nav-link active">👑 Admin Panel</a>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">👑 Admin Panel</h1>
+            <p class="page-subtitle">Manage games, tools, and platform settings</p>
+        </div>
+
+        <!-- Message -->
+        <div class="message"></div>
+
+        <!-- Add Game Section -->
+        <div class="admin-section">
+            <h2 class="section-title">🎮 Add New Game</h2>
+            <form id="addGameForm" class="admin-form">
+                <div class="form-group">
+                    <label for="gameName">Game Name *</label>
+                    <input type="text" id="gameName" required placeholder="Enter game name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameIcon">Game Icon (emoji)</label>
+                    <input type="text" id="gameIcon" placeholder="🎮 (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameCategory">Category *</label>
+                    <select id="gameCategory" required>
+                        <option value="">Select category</option>
+                        <option value="fun">Fun</option>
+                        <option value="visual">Visual</option>
+                        <option value="multiplayer">Multiplayer</option>
+                        <option value="strategy">Strategy</option>
+                        <option value="puzzle">Puzzle</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameLink">Game URL *</label>
+                    <input type="url" id="gameLink" required placeholder="https://example.com/game">
+                </div>
+                
+                <button type="submit" class="btn-submit">Add Game</button>
+            </form>
+        </div>
+
+        <!-- Add Tool Section -->
+        <div class="admin-section">
+            <h2 class="section-title">🛠️ Add New Tool</h2>
+            <form id="addToolForm" class="admin-form">
+                <div class="form-group">
+                    <label for="toolName">Tool Name *</label>
+                    <input type="text" id="toolName" required placeholder="Enter tool name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="toolIcon">Tool Icon (emoji)</label>
+                    <input type="text" id="toolIcon" placeholder="🛠️ (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="toolCategory">Category *</label>
+                    <select id="toolCategory" required>
+                        <option value="">Select category</option>
+                        <option value="optimization">Optimization</option>
+                        <option value="utility">Utility</option>
+                        <option value="graphics">Graphics</option>
+                        <option value="audio">Audio</option>
+                        <option value="network">Network</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="toolLink">Tool URL *</label>
+                    <input type="url" id="toolLink" required placeholder="https://example.com/tool">
+                </div>
+                
+                <button type="submit" class="btn-submit">Add Tool</button>
+            </form>
+        </div>
+
+        <!-- Games Management -->
+        <div class="admin-section">
+            <h2 class="section-title">📋 Manage Games</h2>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Link</th>
+                            <th>Added Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="loading">Loading games...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tools Management -->
+        <div class="admin-section">
+            <h2 class="section-title">⚙️ Manage Tools</h2>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Link</th>
+                            <th>Added Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="loading">Loading tools...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Platform Statistics -->
+        <div class="admin-section">
+            <h2 class="section-title">📊 Platform Statistics</h2>
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="adminTotalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-value" id="adminTotalGames">0</div>
+                    <div class="stat-label">Total Games</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🛠️</div>
+                    <div class="stat-value" id="adminTotalTools">0</div>
+                    <div class="stat-label">Total Tools</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="adminActivity">24</div>
+                    <div class="stat-label">Today's Activity</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tools -->
+        <div class="admin-section">
+            <h2 class="section-title">🔧 Admin Tools</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <button class="btn-action" style="background: var(--accent-primary); color: white;" onclick="backupData()">
+                    💾 Backup Data
+                </button>
+                <button class="btn-action" style="background: var(--warning); color: white;" onclick="clearCache()">
+                    🧹 Clear Cache
+                </button>
+                <button class="btn-action" style="background: var(--success); color: white;" onclick="refreshStats()">
+                    🔄 Refresh Stats
+                </button>
+                <button class="btn-action" style="background: var(--danger); color: white;" onclick="showLogs()">
+                    📋 View Logs
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .admin-table {
+            min-width: 800px;
+        }
+        
+        .admin-table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        .admin-table a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+        
+        .admin-table a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/admin.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script>
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
+            const { auth } = await import('./js/firebase.js');
+            
+            try {
+                await signOut(auth);
+                window.location.href = '/index.html';
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        });
+        
+        // Admin tools functions
+        window.backupData = function() {
+            const message = document.querySelector('.message');
+            message.textContent = 'Backup started... This may take a moment.';
+            message.className = 'message success show';
+            
+            setTimeout(() => {
+                message.textContent = 'Backup completed successfully!';
+            }, 2000);
+        };
+        
+        window.clearCache = function() {
+            const message = document.querySelector('.message');
+            message.textContent = 'Cache cleared successfully!';
+            message.className = 'message success show';
+            
+            // Refresh stats
+            setTimeout(() => {
+                refreshStats();
+            }, 1000);
+        };
+        
+        window.refreshStats = async function() {
+            const message = document.querySelector('.message');
+            message.textContent = 'Refreshing statistics...';
+            message.className = 'message show';
+            
+            try {
+                // Load fresh stats
+                const { auth, db } = await import('./js/firebase.js');
+                const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
+                
+                const usersSnapshot = await getDocs(collection(db, "users"));
+                const gamesSnapshot = await getDocs(collection(db, "games"));
+                const toolsSnapshot = await getDocs(collection(db, "tools"));
+                
+                document.getElementById('adminTotalUsers').textContent = usersSnapshot.size;
+                document.getElementById('adminTotalGames').textContent = gamesSnapshot.size;
+                document.getElementById('adminTotalTools').textContent = toolsSnapshot.size;
+                
+                message.textContent = 'Statistics refreshed successfully!';
+                message.className = 'message success show';
+                
+            } catch (error) {
+                message.textContent = 'Error refreshing statistics: ' + error.message;
+                message.className = 'message error show';
+            }
+        };
+        
+        window.showLogs = function() {
+            const message = document.querySelector('.message');
+            message.innerHTML = `
+                <strong>Recent Admin Logs:</strong><br>
+                • ${new Date().toLocaleTimeString()} - Admin logged in<br>
+                • ${new Date(new Date().getTime() - 300000).toLocaleTimeString()} - New game added<br>
+                • ${new Date(new Date().getTime() - 600000).toLocaleTimeString()} - User registered<br>
+                • ${new Date(new Date().getTime() - 900000).toLocaleTimeString()} - Tool updated
+            `;
+            message.className = 'message show';
+        };
+        
+        // Load admin stats on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                refreshStats();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

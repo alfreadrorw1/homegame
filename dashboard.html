@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Game Platform - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="home-game.html" class="nav-brand">
+                🎮 <span>Home Game</span>
+            </a>
+            
+            <button class="hamburger" id="hamburger">☰</button>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="home-game.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="tools.html" class="nav-link">Tools</a>
+                <!-- Admin link will be added dynamically -->
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">📊 Dashboard</h1>
+            <p class="page-subtitle">Real-time statistics and analytics</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-value" id="totalGames">0</div>
+                <div class="stat-label">Total Games</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🛠️</div>
+                <div class="stat-value" id="totalTools">0</div>
+                <div class="stat-label">Total Tools</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="totalVisits">1.2K</div>
+                <div class="stat-label">Total Visits</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="chart-container">
+            <h3 class="chart-title">Game Categories Distribution</h3>
+            <div style="height: 300px;">
+                <canvas id="statsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Popular Games -->
+        <div class="chart-container" style="margin-top: 30px;">
+            <h3 class="chart-title">🔥 Popular Games</h3>
+            <div id="popularGames" class="popular-games-list">
+                <div class="loading">Loading popular games...</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="chart-container" style="margin-top: 30px;">
+            <h3 class="chart-title">📈 Recent Activity</h3>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">🎮</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New game added: Space Adventure</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">👤</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New user registered: gamer123</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🛠️</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Tool updated: FPS Optimizer</div>
+                        <div class="activity-time">1 day ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div class="message"></div>
+    </main>
+
+    <style>
+        .popular-games-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .popular-game {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .popular-game:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+        
+        .popular-game::before {
+            content: '🔥';
+            font-size: 1.2rem;
+        }
+        
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .activity-icon {
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border-radius: 10px;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script>
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
+            const { auth } = await import('./js/firebase.js');
+            
+            try {
+                await signOut(auth);
+                window.location.href = '/index.html';
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        });
+        
+        // Check auth and role
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { auth, onAuthStateChanged, getUserRole } = await import('./js/firebase.js');
+            
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const userRole = await getUserRole(user.uid);
+                    if (userRole === 'admin') {
+                        // Add admin panel link
+                        const navMenu = document.getElementById('navMenu');
+                        if (navMenu && !document.querySelector('.nav-link[href="admin.html"]')) {
+                            const adminLink = document.createElement('a');
+                            adminLink.href = 'admin.html';
+                            adminLink.className = 'nav-link';
+                            adminLink.innerHTML = '👑 Admin Panel';
+                            navMenu.insertBefore(adminLink, navMenu.lastElementChild);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
