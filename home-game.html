@@ -3,76 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Game Platform - Games</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Home Game Platform | Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="home-game.html" class="nav-brand">
-                🎮 <span>Home Game</span>
-            </a>
-            
-            <button class="hamburger" id="hamburger">☰</button>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-gamepad"></i>
+                <span>Home Game <strong>Platform</strong></span>
+            </div>
             
             <div class="nav-menu" id="navMenu">
-                <a href="home-game.html" class="nav-link active">Home</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="tools.html" class="nav-link">Tools</a>
-                <!-- Admin link will be added dynamically -->
-                <button class="btn-logout" id="logoutBtn">Logout</button>
+                <a href="home-game.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </a>
+                <a href="tools.html" class="nav-link">
+                    <i class="fas fa-tools"></i> Tools
+                </a>
+                <a href="admin.html" class="nav-link admin-only">
+                    <i class="fas fa-crown"></i> Admin
+                </a>
+                <a href="#" id="logoutBtn" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
+            
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">🎮 Featured Games</h1>
-            <p class="page-subtitle">Play amazing games curated for you</p>
+        <header class="page-header">
+            <h1><i class="fas fa-gamepad"></i> Koleksi Game</h1>
+            <p>Pilih game favoritmu dan mulai bermain!</p>
+        </header>
+
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">
+                    <i class="fas fa-th"></i> Semua
+                </button>
+                <button class="filter-btn" data-category="fun">
+                    <i class="fas fa-laugh"></i> Fun
+                </button>
+                <button class="filter-btn" data-category="visual">
+                    <i class="fas fa-eye"></i> Visual
+                </button>
+                <button class="filter-btn" data-category="multiplayer">
+                    <i class="fas fa-users"></i> Multiplayer
+                </button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari game...">
+            </div>
         </div>
 
-        <!-- Games Grid -->
-        <div class="games-grid">
-            <div class="loading">Loading games...</div>
+        <div class="games-grid" id="gamesGrid">
+            <!-- Games will be loaded here -->
+            <div class="loading-games">
+                <div class="spinner"></div>
+                <p>Memuat game...</p>
+            </div>
         </div>
-
-        <!-- Message -->
-        <div class="message"></div>
     </main>
 
-    <script type="module" src="js/firebase.js"></script>
-    <script type="module" src="js/game.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script>
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-        
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                window.location.href = '/index.html';
-            } catch (error) {
-                console.error("Logout error:", error);
-            }
-        });
-    </script>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Memproses...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>

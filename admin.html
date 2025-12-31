@@ -3,335 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Game Platform - Admin Panel</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Home Game Platform | Admin Panel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="home-game.html" class="nav-brand">
-                🎮 <span>Home Game</span>
-            </a>
-            
-            <button class="hamburger" id="hamburger">☰</button>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-gamepad"></i>
+                <span>Home Game <strong>Platform</strong></span>
+            </div>
             
             <div class="nav-menu" id="navMenu">
-                <a href="home-game.html" class="nav-link">Home</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="tools.html" class="nav-link">Tools</a>
-                <a href="admin.html" class="nav-link active">👑 Admin Panel</a>
-                <button class="btn-logout" id="logoutBtn">Logout</button>
+                <a href="home-game.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </a>
+                <a href="tools.html" class="nav-link">
+                    <i class="fas fa-tools"></i> Tools
+                </a>
+                <a href="admin.html" class="nav-link active">
+                    <i class="fas fa-crown"></i> Admin
+                </a>
+                <a href="#" id="logoutBtn" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
+            
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">👑 Admin Panel</h1>
-            <p class="page-subtitle">Manage games, tools, and platform settings</p>
+        <header class="page-header">
+            <h1><i class="fas fa-crown"></i> Admin Panel</h1>
+            <p>Kelola game, tools, dan pengguna platform</p>
+        </header>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="games">
+                <i class="fas fa-gamepad"></i> Kelola Game
+            </button>
+            <button class="admin-tab" data-tab="tools">
+                <i class="fas fa-tools"></i> Kelola Tools
+            </button>
+            <button class="admin-tab" data-tab="users">
+                <i class="fas fa-users"></i> Kelola Pengguna
+            </button>
         </div>
 
-        <!-- Message -->
-        <div class="message"></div>
-
-        <!-- Add Game Section -->
-        <div class="admin-section">
-            <h2 class="section-title">🎮 Add New Game</h2>
-            <form id="addGameForm" class="admin-form">
-                <div class="form-group">
-                    <label for="gameName">Game Name *</label>
-                    <input type="text" id="gameName" required placeholder="Enter game name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="gameIcon">Game Icon (emoji)</label>
-                    <input type="text" id="gameIcon" placeholder="🎮 (optional)">
-                </div>
-                
-                <div class="form-group">
-                    <label for="gameCategory">Category *</label>
-                    <select id="gameCategory" required>
-                        <option value="">Select category</option>
-                        <option value="fun">Fun</option>
-                        <option value="visual">Visual</option>
-                        <option value="multiplayer">Multiplayer</option>
-                        <option value="strategy">Strategy</option>
-                        <option value="puzzle">Puzzle</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="gameLink">Game URL *</label>
-                    <input type="url" id="gameLink" required placeholder="https://example.com/game">
-                </div>
-                
-                <button type="submit" class="btn-submit">Add Game</button>
-            </form>
-        </div>
-
-        <!-- Add Tool Section -->
-        <div class="admin-section">
-            <h2 class="section-title">🛠️ Add New Tool</h2>
-            <form id="addToolForm" class="admin-form">
-                <div class="form-group">
-                    <label for="toolName">Tool Name *</label>
-                    <input type="text" id="toolName" required placeholder="Enter tool name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="toolIcon">Tool Icon (emoji)</label>
-                    <input type="text" id="toolIcon" placeholder="🛠️ (optional)">
-                </div>
-                
-                <div class="form-group">
-                    <label for="toolCategory">Category *</label>
-                    <select id="toolCategory" required>
-                        <option value="">Select category</option>
-                        <option value="optimization">Optimization</option>
-                        <option value="utility">Utility</option>
-                        <option value="graphics">Graphics</option>
-                        <option value="audio">Audio</option>
-                        <option value="network">Network</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="toolLink">Tool URL *</label>
-                    <input type="url" id="toolLink" required placeholder="https://example.com/tool">
-                </div>
-                
-                <button type="submit" class="btn-submit">Add Tool</button>
-            </form>
-        </div>
-
-        <!-- Games Management -->
-        <div class="admin-section">
-            <h2 class="section-title">📋 Manage Games</h2>
-            <div class="table-responsive">
+        <!-- Games Management Tab -->
+        <div class="admin-tab-content active" id="gamesTab">
+            <div class="admin-header">
+                <h3><i class="fas fa-gamepad"></i> Daftar Game</h3>
+                <button class="btn-add" id="addGameBtn">
+                    <i class="fas fa-plus"></i> Tambah Game
+                </button>
+            </div>
+            <div class="admin-table-container">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Icon</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Link</th>
-                            <th>Added Date</th>
-                            <th>Actions</th>
+                            <th>Nama Game</th>
+                            <th>Kategori</th>
+                            <th>Tanggal Ditambah</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="gamesTable">
                         <tr>
-                            <td colspan="6" class="loading">Loading games...</td>
+                            <td colspan="4" class="loading-row">
+                                <div class="spinner"></div>
+                                <p>Memuat data game...</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Tools Management -->
-        <div class="admin-section">
-            <h2 class="section-title">⚙️ Manage Tools</h2>
-            <div class="table-responsive">
+        <!-- Tools Management Tab -->
+        <div class="admin-tab-content" id="toolsTab">
+            <div class="admin-header">
+                <h3><i class="fas fa-tools"></i> Daftar Tools</h3>
+                <button class="btn-add" id="addToolBtnAdmin">
+                    <i class="fas fa-plus"></i> Tambah Tool
+                </button>
+            </div>
+            <div class="admin-table-container">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Icon</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Link</th>
-                            <th>Added Date</th>
-                            <th>Actions</th>
+                            <th>Nama Tool</th>
+                            <th>Kategori</th>
+                            <th>Tanggal Ditambah</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="toolsTable">
                         <tr>
-                            <td colspan="6" class="loading">Loading tools...</td>
+                            <td colspan="4" class="loading-row">
+                                <div class="spinner"></div>
+                                <p>Memuat data tools...</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Platform Statistics -->
-        <div class="admin-section">
-            <h2 class="section-title">📊 Platform Statistics</h2>
-            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-value" id="adminTotalUsers">0</div>
-                    <div class="stat-label">Total Users</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🎮</div>
-                    <div class="stat-value" id="adminTotalGames">0</div>
-                    <div class="stat-label">Total Games</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🛠️</div>
-                    <div class="stat-value" id="adminTotalTools">0</div>
-                    <div class="stat-label">Total Tools</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-value" id="adminActivity">24</div>
-                    <div class="stat-label">Today's Activity</div>
-                </div>
+        <!-- Users Management Tab -->
+        <div class="admin-tab-content" id="usersTab">
+            <div class="admin-header">
+                <h3><i class="fas fa-users"></i> Daftar Pengguna</h3>
             </div>
-        </div>
-
-        <!-- Admin Tools -->
-        <div class="admin-section">
-            <h2 class="section-title">🔧 Admin Tools</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <button class="btn-action" style="background: var(--accent-primary); color: white;" onclick="backupData()">
-                    💾 Backup Data
-                </button>
-                <button class="btn-action" style="background: var(--warning); color: white;" onclick="clearCache()">
-                    🧹 Clear Cache
-                </button>
-                <button class="btn-action" style="background: var(--success); color: white;" onclick="refreshStats()">
-                    🔄 Refresh Stats
-                </button>
-                <button class="btn-action" style="background: var(--danger); color: white;" onclick="showLogs()">
-                    📋 View Logs
-                </button>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Tanggal Daftar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr>
+                            <td colspan="4" class="loading-row">
+                                <div class="spinner"></div>
+                                <p>Memuat data pengguna...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 
-    <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
-        
-        .admin-table {
-            min-width: 800px;
-        }
-        
-        .admin-table td {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 200px;
-        }
-        
-        .admin-table a {
-            color: var(--accent-primary);
-            text-decoration: none;
-        }
-        
-        .admin-table a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <!-- Add Game Modal -->
+    <div id="addGameModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Tambah Game Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="gameForm">
+                    <div class="input-group">
+                        <label for="gameName">
+                            <i class="fas fa-gamepad"></i> Nama Game
+                        </label>
+                        <input type="text" id="gameName" placeholder="Nama game" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="gameIcon">
+                            <i class="fas fa-icons"></i> Icon URL
+                        </label>
+                        <input type="text" id="gameIcon" placeholder="URL icon atau nama FontAwesome (fa fa-gamepad)" required>
+                        <small>Gunakan FontAwesome atau URL gambar</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="gameCategory">
+                            <i class="fas fa-tag"></i> Kategori
+                        </label>
+                        <select id="gameCategory" required>
+                            <option value="">Pilih kategori</option>
+                            <option value="fun">Fun</option>
+                            <option value="visual">Visual</option>
+                            <option value="multiplayer">Multiplayer</option>
+                            <option value="puzzle">Puzzle</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="gameLink">
+                            <i class="fas fa-link"></i> Link Game
+                        </label>
+                        <input type="url" id="gameLink" placeholder="https://" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="gameDescription">
+                            <i class="fas fa-align-left"></i> Deskripsi
+                        </label>
+                        <textarea id="gameDescription" placeholder="Deskripsi game" rows="3"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn-secondary close-modal">Batal</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Simpan Game
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <script type="module" src="js/firebase.js"></script>
-    <script type="module" src="js/admin.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script>
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-        
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
-            const { auth } = await import('./js/firebase.js');
-            
-            try {
-                await signOut(auth);
-                window.location.href = '/index.html';
-            } catch (error) {
-                console.error("Logout error:", error);
-            }
-        });
-        
-        // Admin tools functions
-        window.backupData = function() {
-            const message = document.querySelector('.message');
-            message.textContent = 'Backup started... This may take a moment.';
-            message.className = 'message success show';
-            
-            setTimeout(() => {
-                message.textContent = 'Backup completed successfully!';
-            }, 2000);
-        };
-        
-        window.clearCache = function() {
-            const message = document.querySelector('.message');
-            message.textContent = 'Cache cleared successfully!';
-            message.className = 'message success show';
-            
-            // Refresh stats
-            setTimeout(() => {
-                refreshStats();
-            }, 1000);
-        };
-        
-        window.refreshStats = async function() {
-            const message = document.querySelector('.message');
-            message.textContent = 'Refreshing statistics...';
-            message.className = 'message show';
-            
-            try {
-                // Load fresh stats
-                const { auth, db } = await import('./js/firebase.js');
-                const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
-                
-                const usersSnapshot = await getDocs(collection(db, "users"));
-                const gamesSnapshot = await getDocs(collection(db, "games"));
-                const toolsSnapshot = await getDocs(collection(db, "tools"));
-                
-                document.getElementById('adminTotalUsers').textContent = usersSnapshot.size;
-                document.getElementById('adminTotalGames').textContent = gamesSnapshot.size;
-                document.getElementById('adminTotalTools').textContent = toolsSnapshot.size;
-                
-                message.textContent = 'Statistics refreshed successfully!';
-                message.className = 'message success show';
-                
-            } catch (error) {
-                message.textContent = 'Error refreshing statistics: ' + error.message;
-                message.className = 'message error show';
-            }
-        };
-        
-        window.showLogs = function() {
-            const message = document.querySelector('.message');
-            message.innerHTML = `
-                <strong>Recent Admin Logs:</strong><br>
-                • ${new Date().toLocaleTimeString()} - Admin logged in<br>
-                • ${new Date(new Date().getTime() - 300000).toLocaleTimeString()} - New game added<br>
-                • ${new Date(new Date().getTime() - 600000).toLocaleTimeString()} - User registered<br>
-                • ${new Date(new Date().getTime() - 900000).toLocaleTimeString()} - Tool updated
-            `;
-            message.className = 'message show';
-        };
-        
-        // Load admin stats on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                refreshStats();
-            }, 1000);
-        });
-    </script>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Apakah Anda yakin ingin menghapus item ini?</p>
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary close-modal">Batal</button>
+                    <button type="button" class="btn-danger" id="confirmDelete">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Memproses...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

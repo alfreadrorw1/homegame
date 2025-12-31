@@ -3,98 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Game Platform - Login</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Home Game Platform | Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 </head>
 <body class="auth-page">
     <div class="auth-container">
         <div class="auth-header">
-            <h1 class="logo">🎮 Home Game</h1>
-            <p class="tagline">Premium Gaming Platform</p>
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h1>Home Game <span>Platform</span></h1>
+            </div>
+            <p class="tagline">Tempat terbaik untuk game & tools berkualitas</p>
         </div>
-        
+
         <div class="auth-tabs">
-            <button class="auth-tab active" data-tab="login">Login</button>
-            <button class="auth-tab" data-tab="register">Register</button>
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="register">Register</button>
         </div>
-        
-        <!-- Login Form -->
-        <form id="loginForm" class="auth-form active">
-            <div class="input-group">
-                <label for="loginEmail">Email</label>
-                <input type="email" id="loginEmail" required placeholder="user@example.com">
-            </div>
-            
-            <div class="input-group">
-                <label for="loginPassword">Password</label>
-                <input type="password" id="loginPassword" required placeholder="••••••••">
-            </div>
-            
-            <button type="submit" class="btn-auth">Login</button>
-            
-            <div class="auth-footer">
-                <p>Demo Account: admin@homegame.com / password123</p>
-            </div>
-        </form>
-        
-        <!-- Register Form -->
-        <form id="registerForm" class="auth-form">
-            <div class="input-group">
-                <label for="registerEmail">Email</label>
-                <input type="email" id="registerEmail" required placeholder="user@example.com">
-            </div>
-            
-            <div class="input-group">
-                <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" required placeholder="••••••••" minlength="6">
-            </div>
-            
-            <div class="input-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" required placeholder="••••••••" minlength="6">
-            </div>
-            
-            <button type="submit" class="btn-auth">Register</button>
-        </form>
-        
-        <div class="auth-message" id="authMessage"></div>
+
+        <div class="auth-form-container">
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <div class="input-group">
+                    <label for="loginEmail">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="loginEmail" placeholder="nama@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="loginPassword" placeholder="Minimal 6 karakter" required>
+                    <button type="button" class="toggle-password" data-target="loginPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button type="submit" class="btn-auth">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                <div class="demo-credentials">
+                    <p><strong>Demo Admin:</strong> admin@test.com / admin123</p>
+                    <p><strong>Demo User:</strong> user@test.com / user123</p>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form">
+                <div class="input-group">
+                    <label for="registerEmail">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="registerEmail" placeholder="nama@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="registerPassword">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="registerPassword" placeholder="Minimal 6 karakter" required>
+                    <button type="button" class="toggle-password" data-target="registerPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i> Konfirmasi Password
+                    </label>
+                    <input type="password" id="confirmPassword" placeholder="Ulangi password" required>
+                    <button type="button" class="toggle-password" data-target="confirmPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button type="submit" class="btn-auth">
+                    <i class="fas fa-user-plus"></i> Daftar
+                </button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <p>© 2024 Home Game Platform. All rights reserved.</p>
+        </div>
     </div>
-    
-    <div class="particles" id="particles"></div>
-    
-    <script type="module" src="js/firebase.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script>
-        // Tab switching
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabType = tab.dataset.tab;
-                
-                // Update active tab
-                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // Show corresponding form
-                document.querySelectorAll('.auth-form').forEach(form => {
-                    form.classList.remove('active');
-                });
-                document.getElementById(`${tabType}Form`).classList.add('active');
-            });
-        });
-        
-        // Particle effect
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            particlesContainer.appendChild(particle);
-        }
-    </script>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Memproses...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

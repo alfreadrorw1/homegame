@@ -1,28 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { 
-    getAuth, 
-    onAuthStateChanged,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut 
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import { 
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    serverTimestamp,
-    collection,
-    addDoc,
-    deleteDoc,
-    updateDoc,
-    getDocs,
-    query,
-    orderBy,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-// ⚠️ GANTI DENGAN CONFIG ANDA ⚠️
+// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBvr6owbrZS_9ltSIk_FJQ2XVva5fQjyr0",
     authDomain: "gabutan-alfread.firebaseapp.com",
@@ -35,62 +11,15 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
 
-// Export semua fungsi yang dibutuhkan
-export { 
-    auth, 
-    db, 
-    onAuthStateChanged,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    doc,
-    getDoc,
-    setDoc,
-    serverTimestamp,
-    collection,
-    addDoc,
-    deleteDoc,
-    updateDoc,
-    getDocs,
-    query,
-    orderBy,
-    onSnapshot
-};
+// Initialize Firebase services
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-// Get user role
-export async function getUserRole(userId) {
-    try {
-        const userDoc = await getDoc(doc(db, "users", userId));
-        if (userDoc.exists()) {
-            return userDoc.data().role || "user";
-        }
-        return "user";
-    } catch (error) {
-        console.error("Error getting user role:", error);
-        return "user";
-    }
-}
-
-// Redirect if not authenticated
-export function requireAuth(requiredRole = null) {
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.href = '/index.html';
-            return;
-        }
-
-        if (requiredRole) {
-            const userRole = await getUserRole(user.uid);
-            if (userRole !== requiredRole) {
-                if (requiredRole === 'admin') {
-                    window.location.href = '/home-game.html';
-                }
-                return;
-            }
-        }
-    });
-}
+// Export for use in other modules
+window.firebase = firebase;
+window.auth = auth;
+window.db = db;
+window.storage = storage;

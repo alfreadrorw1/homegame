@@ -3,101 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Game Platform - Tools</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Home Game Platform | Tools</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="home-game.html" class="nav-brand">
-                🎮 <span>Home Game</span>
-            </a>
-            
-            <button class="hamburger" id="hamburger">☰</button>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-gamepad"></i>
+                <span>Home Game <strong>Platform</strong></span>
+            </div>
             
             <div class="nav-menu" id="navMenu">
-                <a href="home-game.html" class="nav-link">Home</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="tools.html" class="nav-link active">Tools</a>
-                <!-- Admin link will be added dynamically -->
-                <button class="btn-logout" id="logoutBtn">Logout</button>
+                <a href="home-game.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </a>
+                <a href="tools.html" class="nav-link active">
+                    <i class="fas fa-tools"></i> Tools
+                </a>
+                <a href="admin.html" class="nav-link admin-only">
+                    <i class="fas fa-crown"></i> Admin
+                </a>
+                <a href="#" id="logoutBtn" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
+            
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">🛠️ Gaming Tools</h1>
-            <p class="page-subtitle">Essential tools to enhance your gaming experience</p>
+        <header class="page-header">
+            <h1><i class="fas fa-tools"></i> Koleksi Tools</h1>
+            <p>Alat bantu untuk meningkatkan pengalaman gaming</p>
+            <button class="btn-add admin-only" id="addToolBtn">
+                <i class="fas fa-plus"></i> Tambah Tool
+            </button>
+        </header>
+
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">
+                    <i class="fas fa-th"></i> Semua
+                </button>
+                <button class="filter-btn" data-category="utility">
+                    <i class="fas fa-cog"></i> Utility
+                </button>
+                <button class="filter-btn" data-category="converter">
+                    <i class="fas fa-exchange-alt"></i> Converter
+                </button>
+                <button class="filter-btn" data-category="generator">
+                    <i class="fas fa-magic"></i> Generator
+                </button>
+                <button class="filter-btn" data-category="editor">
+                    <i class="fas fa-edit"></i> Editor
+                </button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari tools...">
+            </div>
         </div>
 
-        <!-- Tools Grid -->
-        <div class="tools-grid">
-            <div class="loading">Loading tools...</div>
+        <div class="tools-grid" id="toolsGrid">
+            <!-- Tools will be loaded here -->
+            <div class="loading-tools">
+                <div class="spinner"></div>
+                <p>Memuat tools...</p>
+            </div>
         </div>
-
-        <!-- Message -->
-        <div class="message"></div>
     </main>
 
-    <script type="module" src="js/firebase.js"></script>
-    <script type="module" src="js/tools.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script>
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-        
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            const { signOut } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
-            const { auth } = await import('./js/firebase.js');
-            
-            try {
-                await signOut(auth);
-                window.location.href = '/index.html';
-            } catch (error) {
-                console.error("Logout error:", error);
-            }
-        });
-        
-        // Check auth and role
-        document.addEventListener('DOMContentLoaded', async () => {
-            const { auth, onAuthStateChanged, getUserRole } = await import('./js/firebase.js');
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    const userRole = await getUserRole(user.uid);
-                    if (userRole === 'admin') {
-                        // Add admin panel link
-                        const navMenu = document.getElementById('navMenu');
-                        if (navMenu && !document.querySelector('.nav-link[href="admin.html"]')) {
-                            const adminLink = document.createElement('a');
-                            adminLink.href = 'admin.html';
-                            adminLink.className = 'nav-link';
-                            adminLink.innerHTML = '👑 Admin Panel';
-                            navMenu.insertBefore(adminLink, navMenu.lastElementChild);
-                        }
-                    }
-                }
-            });
-        });
-    </script>
+    <!-- Add Tool Modal (Admin Only) -->
+    <div id="addToolModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Tambah Tool Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="toolForm">
+                    <div class="input-group">
+                        <label for="toolName">
+                            <i class="fas fa-toolbox"></i> Nama Tool
+                        </label>
+                        <input type="text" id="toolName" placeholder="Nama tool" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="toolIcon">
+                            <i class="fas fa-icons"></i> Icon URL
+                        </label>
+                        <input type="text" id="toolIcon" placeholder="URL icon atau nama FontAwesome (fa fa-tools)" required>
+                        <small>Gunakan FontAwesome atau URL gambar</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="toolCategory">
+                            <i class="fas fa-tag"></i> Kategori
+                        </label>
+                        <select id="toolCategory" required>
+                            <option value="">Pilih kategori</option>
+                            <option value="utility">Utility</option>
+                            <option value="converter">Converter</option>
+                            <option value="generator">Generator</option>
+                            <option value="editor">Editor</option>
+                            <option value="other">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="toolLink">
+                            <i class="fas fa-link"></i> Link Tool
+                        </label>
+                        <input type="url" id="toolLink" placeholder="https://" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="toolDescription">
+                            <i class="fas fa-align-left"></i> Deskripsi
+                        </label>
+                        <textarea id="toolDescription" placeholder="Deskripsi tool" rows="3"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn-secondary close-modal">Batal</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Simpan Tool
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Memproses...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tools.js"></script>
 </body>
 </html>

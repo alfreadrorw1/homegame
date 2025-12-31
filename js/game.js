@@ -1,129 +1,209 @@
-import { auth, db, requireAuth } from './firebase.js';
-import { 
-    collection, 
-    getDocs, 
-    query, 
-    orderBy,
-    addDoc,
-    deleteDoc,
-    doc,
-    updateDoc,
-    serverTimestamp,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+class GameManager {
+    constructor() {
+        this.games = [];
+        this.filteredGames = [];
+        this.currentCategory = 'all';
+        this.searchTerm = '';
+        this.init();
+    }
 
-// Initialize
-requireAuth();
+    init() {
+        // Check authentication first
+        if (!auth.currentUser) {
+            window.location.href = 'index.html';
+            return;
+        }
 
-// DOM Elements
-const gamesGrid = document.querySelector('.games-grid');
-const loadingElement = document.querySelector('.loading');
-const messageElement = document.querySelector('.message');
+        this.loadGames();
+        this.initEventListeners();
+    }
 
-// Show message
-function showMessage(message, type = 'error') {
-    messageElement.textContent = message;
-    messageElement.className = `message ${type} show`;
-    
-    setTimeout(() => {
-        messageElement.className = 'message';
-    }, 3000);
-}
-
-// Load games
-async function loadGames() {
-    try {
-        const gamesQuery = query(
-            collection(db, "games"),
-            orderBy("createdAt", "desc")
-        );
-        
-        onSnapshot(gamesQuery, (snapshot) => {
-            gamesGrid.innerHTML = '';
-            
-            if (snapshot.empty) {
-                gamesGrid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🎮</div>
-                        <div class="empty-text">No games available</div>
-                        <div class="empty-subtext">Games will appear here once added by admin</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            snapshot.forEach((doc) => {
-                const game = doc.data();
-                game.id = doc.id;
-                createGameCard(game);
+    initEventListeners() {
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.setActiveFilter(e.target);
+                this.filterGames();
             });
+        });
+
+        // Search input
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchTerm = e.target.value.toLowerCase();
+                this.filterGames();
+            });
+        }
+    }
+
+    setActiveFilter(button) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        button.classList.add('active');
+        this.currentCategory = button.dataset.category;
+    }
+
+    async loadGames() {
+        try {
+            this.showLoading();
             
-            if (loadingElement) {
-                loadingElement.style.display = 'none';
+            // Get games from Firestore
+            const snapshot = await db.collection('games')
+                .orderBy('createdAt', 'desc')
+                .get();
+            
+            this.games = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            
+            this.filterGames();
+            
+        } catch (error) {
+            this.showToast('Error loading games: ' + error.message, 'error');
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    filterGames() {
+        this.filteredGames = this.games.filter(game => {
+            // Filter by category
+            if (this.currentCategory !== 'all' && game.category !== this.currentCategory) {
+                return false;
             }
+            
+            // Filter by search term
+            if (this.searchTerm && !game.name.toLowerCase().includes(this.searchTerm)) {
+                return false;
+            }
+            
+            return true;
         });
         
-    } catch (error) {
-        console.error("Error loading games:", error);
-        showMessage('Error loading games');
+        this.renderGames();
     }
-}
 
-// Create game card
-function createGameCard(game) {
-    const card = document.createElement('div');
-    card.className = 'game-card';
-    
-    const categoryClass = game.category === 'multiplayer' ? 'game-category multiplayer' : 
-                         game.category === 'visual' ? 'game-category visual' : 'game-category fun';
-    
-    card.innerHTML = `
-        <div class="game-icon">${game.icon || '🎮'}</div>
-        <h3 class="game-title">${game.name}</h3>
-        <span class="${categoryClass}">${game.category}</span>
-        <p class="game-description">Click play to start gaming!</p>
-        <button class="btn-play" onclick="playGame('${game.link}')">Play Now</button>
-    `;
-    
-    gamesGrid.appendChild(card);
-}
-
-// Play game
-window.playGame = function(url) {
-    if (!url) {
-        showMessage('Game link not available');
-        return;
-    }
-    
-    if (!url.startsWith('http')) {
-        url = 'https://' + url;
-    }
-    
-    window.open(url, '_blank');
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    loadGames();
-    
-    // Check if user is admin
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userRole = await getUserRole(user.uid);
-            if (userRole === 'admin') {
-                // Add admin panel link
-                const navMenu = document.querySelector('.nav-menu');
-                if (navMenu && !document.querySelector('.nav-link[href="admin.html"]')) {
-                    const adminLink = document.createElement('a');
-                    adminLink.href = 'admin.html';
-                    adminLink.className = 'nav-link';
-                    adminLink.textContent = 'Admin Panel';
-                    navMenu.insertBefore(adminLink, navMenu.lastElementChild);
-                }
-            }
+    renderGames() {
+        const gamesGrid = document.getElementById('gamesGrid');
+        if (!gamesGrid) return;
+        
+        if (this.filteredGames.length === 0) {
+            gamesGrid.innerHTML = `
+                <div class="no-games">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Tidak ada game ditemukan</h3>
+                    <p>Coba gunakan filter atau kata kunci yang berbeda</p>
+                </div>
+            `;
+            return;
         }
-    });
-});
+        
+        gamesGrid.innerHTML = this.filteredGames.map(game => this.createGameCard(game)).join('');
+        
+        // Add click event to play buttons
+        gamesGrid.querySelectorAll('.btn-play').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const gameId = e.target.closest('.game-card').dataset.id;
+                this.playGame(gameId);
+            });
+        });
+    }
 
-// Export for other scripts
-export { loadGames, createGameCard };
+    createGameCard(game) {
+        const icon = game.icon || 'fas fa-gamepad';
+        const iconIsFa = icon.includes('fa-');
+        
+        return `
+            <div class="game-card" data-id="${game.id}">
+                <div class="card-header">
+                    <div class="card-icon">
+                        ${iconIsFa ? `<i class="${icon}"></i>` : `<img src="${icon}" alt="${game.name}">`}
+                    </div>
+                    <div class="card-content">
+                        <h3>${game.name}</h3>
+                        <span class="card-category">${this.getCategoryLabel(game.category)}</span>
+                    </div>
+                </div>
+                <p class="card-description">${game.description || 'Game seru untuk dimainkan!'}</p>
+                <div class="card-actions">
+                    <button class="btn-play">
+                        <i class="fas fa-play"></i> Mainkan
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    getCategoryLabel(category) {
+        const labels = {
+            'fun': 'Fun',
+            'visual': 'Visual',
+            'multiplayer': 'Multiplayer',
+            'puzzle': 'Puzzle'
+        };
+        return labels[category] || category;
+    }
+
+    playGame(gameId) {
+        const game = this.games.find(g => g.id === gameId);
+        if (game && game.link) {
+            // Open game in new tab
+            window.open(game.link, '_blank');
+            
+            // Log play activity
+            this.logGameActivity(gameId);
+        }
+    }
+
+    async logGameActivity(gameId) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            await db.collection('game_activity').add({
+                userId: user.uid,
+                gameId: gameId,
+                playedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Error logging game activity:', error);
+        }
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        
+        toast.textContent = message;
+        toast.className = `toast ${type} show`;
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    showLoading() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+        }
+    }
+
+    hideLoading() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    }
+}
+
+// Initialize game manager when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('gamesGrid')) {
+        window.gameManager = new GameManager();
+    }
+});
